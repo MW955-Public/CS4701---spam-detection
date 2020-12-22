@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+    body{
+        background-image: url('../static/95704.jpg');
+    }
+    .container{
+        background-image: url('../static/95704.jpg');
+    }
+    #textInput {
+        border: none;
+        border-bottom: 3px solid #ddffd5;
+    }
+    .text-center{
+
+        margin: 50px;
+        padding-left: 100px;
+        padding-right: 100px;
+    }
+    .col-sm-6{
+        background-color: #ffffff;
+    }
+    .border border-success{
+        border-color: #ddffd5;
+    }
+    #chatbox{
+        border-color: #ddffd5;
+    }
+    .userText {
+        color: #0c0000;
+        font-family: monospace;
+        font-size: 17px;
+        text-align: right;
+        line-height: 30px;
+    }
+    .userText span {
+        background-color: #e2fffc;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .botText {
+        color: #050000;
+        font-family: monospace;
+        font-size: 17px;
+        text-align: left;
+        line-height: 30px;
+    }
+    .botText span {
+        background-color: #fff2e2;
+        padding: 10px;
+        border-radius: 10px;
+    }
+    .form-horizontal{
+        padding: 10px;
+    }
+    .btn btn-success form-control{
+        padding: 20px;
+        margin: 20px;
+    }
+    .form-control{
+        border-color: #e2fffc;
+    }
+
+
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1 class="text-center">Spam Message Detection</h1>
+<div class="container" >
+    <div class="row">
+        <div class="col-sm-6 offset-sm-3">
+            <div>
+                <form class="form-horizontal">
+                    <label for="flip-1">Change Detection Method:</label>
+                    <select name="flip-1" id="flip-1" class="option-list" data-role="slider">
+                        <option  value="bayers">Bayers</option>
+                        <option value="bigram">Bigram</option>
+                        <option  value="trigram">Trigram</option>
+                    </select>
+                </form>
+            </div>
+            <div id="chatbox" class="border border-success">
+                <p class="botText"><span>Hi! I will help you to check spam message!</span></p>
+            </div>
+        </div>
+        <div class="col-sm-6 offset-sm-3">
+            <div id="userInput">
+                <input id="textInput" class="form-control" type="text" name="msg" placeholder="Type Your Message Here">
+                <input id="buttonInput" class="btn btn-success form-control" type="submit" value="Send">
+            </div>
+        </div>
+
+
+    </div>
+
+<script>
+    function getResponse() {
+        let userText = $("#textInput").val();
+        let userMethod = $("#flip-1").val();
+        let userHtml = '<p class="userText"><span>' + userText + '</span></p>';
+
+        $("#textInput").val("");
+        $("#chatbox").append(userHtml);
+        document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+        $.get("/get", { msg: userText, method: userMethod }).done(function(data) {
+        var botHtml = '<p class="botText"><span>' + data + '</span></p>';
+        $("#chatbox").append(botHtml);
+        document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+});
+}
+    $("#textInput").keypress(function(e) {
+    //if enter key is pressed
+        if(e.which == 13) {
+            getResponse();
+        }
+    });
+    $("#buttonInput").click(function() {
+        getResponse();
+    });
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</div>
+</body>
+</html>
